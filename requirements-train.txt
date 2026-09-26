@@ -1,0 +1,9 @@
+# Training-only deps (local modeling; NOT in the Docker image).
+-r requirements-serve.txt
+xgboost==3.4.1
+lightgbm==4.7.0
+shap==0.52.0
+mlflow==3.16.1
+matplotlib==3.11.2
+seaborn==0.13.2
+jupyter==1.1.1

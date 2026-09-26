@@ -1,0 +1,5 @@
+# Full local stack (serving + training + dev).
+-r requirements-train.txt
+pytest==9.1.1
+ruff==0.16.9
+httpx==0.28.1
