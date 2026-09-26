@@ -4,6 +4,8 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgomp1 \
+    curl \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Installed in three small layers (not one): a single 831 MB layer
@@ -20,7 +22,17 @@ RUN pip install --no-cache-dir -r requirements-serve-api.txt
 
 COPY src/ ./src/
 COPY api/ ./api/
-COPY models/xgboost_pipeline.joblib ./models/xgboost_pipeline.joblib
+
+# Production model: fetched by exact release version, SHA256-verified.
+# Never a moving tag, never baked from a developer laptop. Provenance:
+# https://github.com/Bakr1m/noshow-optimizer/releases/tag/v1.0.0
+ARG MODEL_TAG=v1.0.0
+ARG MODEL_SHA256=fb453a00b42863fa36eecf64931c70f4eb92e0fc0ae9a06d3d571ca58d2c1942
+RUN mkdir -p models && \
+    curl -fsSL -o models/xgboost_pipeline.joblib \
+      "https://github.com/Bakr1m/noshow-optimizer/releases/download/${MODEL_TAG}/xgboost_pipeline.joblib" && \
+    echo "${MODEL_SHA256}  models/xgboost_pipeline.joblib" | sha256sum -c - && \
+    python -c "import joblib; m=joblib.load('models/xgboost_pipeline.joblib'); print('artifact OK:', type(m).__name__)"
 
 EXPOSE 8000
 
