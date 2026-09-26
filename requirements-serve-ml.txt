@@ -1,0 +1,10 @@
+# Layer 2/3: modeling.
+# NOTE: installed with --no-deps in Docker: xgboost declares nvidia-nccl
+# (~250 MB, GPU-only, never imported on CPU paths — verified) and
+# scikit-learn pulls scipy/threadpoolctl. Deps are pinned explicitly instead.
+scikit-learn==1.9.1
+threadpoolctl==3.7.0
+joblib==1.6.0
+cloudpickle==3.1.2
+narwhals==2.26.0
+xgboost==3.4.1
