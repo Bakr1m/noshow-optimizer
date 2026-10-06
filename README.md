@@ -94,8 +94,8 @@ python api/main.py   # :8000
 ## Run with Docker
 
 ```bash
-docker pull bakr1m/noshow-api:v1
-docker run -p 8000:8000 bakr1m/noshow-api:v1
+docker pull bakr1m/noshow-api:latest
+docker run -p 8000:8000 bakr1m/noshow-api:latest
 curl -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" -d '{"Gender":"F", ...}'
 ```
