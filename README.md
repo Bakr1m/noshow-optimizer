@@ -1,6 +1,4 @@
-# Project 5: Patient No-Show & Hospital Ops Optimizer
-
-**Days 51–60 | Healthcare ML Portfolio**
+# Patient No-Show & Hospital Ops Optimizer
 
 ## Business Context
 
@@ -21,15 +19,15 @@ in metrics.
 
 ## Approach
 
-1. **EDA** (Day 51): target-first screening — lead +0.18 dominates.
-2. **Features** (Day 52): past-only history, calendar, age groups; IDs out.
-3. **Baseline + costs** (Day 53): balanced LR; $150 FN / $5 FP (30:1) fixed
+1. **EDA**: target-first screening — lead +0.18 dominates.
+2. **Features**: past-only history, calendar, age groups; IDs out.
+3. **Baseline + costs**: balanced LR; $150 FN / $5 FP (30:1) fixed
    up front as documented stakeholder assumptions.
-4. **Boosting + tuned threshold** (Day 54): XGBoost vs LightGBM on 64/16/20;
+4. **Boosting + tuned threshold**: XGBoost vs LightGBM on 64/16/20;
    argmin *validation* cost; winner XGBoost on val $.
-5. **Simulation** (Day 55): $1 reminders at 30% effectiveness on held-out test.
-6. **Tracking + SHAP** (Day 56): 4 MLflow runs; age/lead/place drivers.
-7. **Serving + container** (Day 57): stateless `/predict`, 1.49 GB image,
+5. **Simulation**: $1 reminders at 30% effectiveness on held-out test.
+6. **Tracking + SHAP**: 4 MLflow runs; age/lead/place drivers.
+7. **Serving + container**: stateless `/predict`, 1.49 GB image,
    bit-identical parity.
 
 ## Results
