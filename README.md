@@ -91,6 +91,22 @@ make test     # hermetic, no data/ needed
 python api/main.py   # :8000
 ```
 
+## Try It in 60 Seconds (no local setup needed)
+
+```bash
+docker pull bakr1m/noshow-api:latest
+docker run -d --name noshow -p 8005:8000 bakr1m/noshow-api:latest
+curl http://localhost:8005/health
+# {"status":"healthy"}
+curl -X POST http://localhost:8005/predict \
+  -H "Content-Type: application/json" -d @example_appointment.json
+# -> {"no_show_risk":0.5688,"flag":true,"threshold":0.15}
+docker stop noshow && docker rm noshow
+```
+
+(`example_appointment.json` is in this repo — the exact payload CI
+smoke-tests the shipped image with. Verified live against `:latest`.)
+
 ## Run with Docker
 
 ```bash
@@ -99,6 +115,24 @@ docker run -p 8000:8000 bakr1m/noshow-api:latest
 curl -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" -d '{"Gender":"F", ...}'
 ```
+
+## Problems Encountered (Build & Deploy)
+
+1. **Docker pushes kept dying mid-upload.** A single ~800 MB layer
+   repeatedly broke on a thin uplink. Fixed by installing in several small
+   layers (one package per `RUN`) so each blob pushes alone — the pattern
+   is commented in the Dockerfile so the next reader doesn't "simplify" it
+   back into one layer.
+2. **Default 0.5 threshold was nonsense.** At 30:1 cost asymmetry the
+   operating point is 0.15 (recall-first) — the model README leads with
+   cost, not accuracy, because accuracy answers the wrong question here.
+3. **The honest simulation result.** The reminder policy saves $178k/26%
+   but targets ≈ remind-everyone — reported as-is rather than dressed up
+   as precision targeting. A model whose best policy is "remind everyone"
+   is still worth deploying; claiming otherwise would be dishonest.
+4. **Single-city 2016 data.** Transport, SMS habits, and cost figures don't
+   transfer — all savings are stakeholder assumptions, stated upfront, not
+   invoices.
 
 ## Key Learnings
 
