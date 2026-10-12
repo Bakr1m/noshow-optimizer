@@ -30,6 +30,23 @@ in metrics.
 7. **Serving + container**: stateless `/predict`, 1.49 GB image,
    bit-identical parity.
 
+
+### Architecture
+
+```mermaid
+flowchart LR
+  A["110k appointments<br/>20.2% no-show"] --> B["Features<br/>past-only, calendar, age"]
+  B --> C["LR baseline<br/>balanced, $150/$5 costs"]
+  C --> D["XGBoost vs LightGBM<br/>64/16/20, val-cost tuned"]
+  D --> E["Threshold 0.15<br/>recall-first 30:1"]
+  E --> F["Reminder sim<br/>$1 @30% effect"]
+  F --> G["$178k / 26% saved<br/>1330 prevented"]
+  E --> H["FastAPI /predict<br/>stateless"]
+  H --> I["Docker 1.49GB<br/>bit-identical"]
+```
+
+> Source: `docs/architecture.mmd`
+
 ## Results
 
 | Model | ROC-AUC | PR-AUC | Test cost |
